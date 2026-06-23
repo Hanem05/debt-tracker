@@ -6,14 +6,16 @@ import { User, Shield, Globe } from 'lucide-react';
 import { SecurityActions } from '@/components/settings/SecurityActions';
 
 async function getSessionAndProfile() {
-  const supabase = createClient();
-  const { data: authData } = await supabase.auth.getUser();
-  const user = authData?.user;
-  if (!user) return { user: null, profile: null };
-
-  const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
-  if (error) throw new Error(error.message);
-  return { user, profile: data };
+  try {
+    const supabase = createClient();
+    const { data: authData } = await supabase.auth.getUser();
+    const user = authData?.user;
+    if (!user) return { user: null, profile: null };
+    const { data } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
+    return { user, profile: data };
+  } catch {
+    return { user: null, profile: null };
+  }
 }
 
 function Row({ label, value }: { label: string; value: string }) {

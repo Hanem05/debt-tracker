@@ -11,38 +11,38 @@ import { InterestRateChart } from '@/components/dashboard/InterestRateChart';
 import { TrendingUp, AlertTriangle, Wallet, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 
+const emptyPortfolio: LenderPortfolio = {
+  lender_id: '', total_borrowers: 0, total_loaned: 0, total_outstanding: 0,
+  total_collected_principal: 0, total_collected_interest: 0, total_accrued_interest: 0,
+  active_count: 0, overdue_count: 0, settled_count: 0, avg_interest_rate: 0, collection_rate_pct: 0,
+};
+
 async function getPortfolio() {
-  const supabase = createClient();
-  const { data, error } = await supabase.from('lender_portfolio').select('*').maybeSingle();
-  if (error) throw new Error(error.message);
-  if (!data) {
-    return {
-      lender_id: '',
-      total_borrowers: 0,
-      total_loaned: 0,
-      total_outstanding: 0,
-      total_collected_principal: 0,
-      total_collected_interest: 0,
-      total_accrued_interest: 0,
-      active_count: 0,
-      overdue_count: 0,
-      settled_count: 0,
-      avg_interest_rate: 0,
-      collection_rate_pct: 0,
-    } as LenderPortfolio;
+  try {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return emptyPortfolio;
+    const { data } = await supabase.from('lender_portfolio').select('*').maybeSingle();
+    return (data as LenderPortfolio) ?? emptyPortfolio;
+  } catch {
+    return emptyPortfolio;
   }
-  return data as LenderPortfolio;
 }
 
 async function getBorrowers() {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from('borrower_summary')
-    .select('*')
-    .order('outstanding_principal', { ascending: false })
-    .limit(8);
-  if (error) throw new Error(error.message);
-  return data as BorrowerSummary[];
+  try {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return [];
+    const { data } = await supabase
+      .from('borrower_summary')
+      .select('*')
+      .order('outstanding_principal', { ascending: false })
+      .limit(8);
+    return (data as BorrowerSummary[]) ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export default async function DashboardPage() {
