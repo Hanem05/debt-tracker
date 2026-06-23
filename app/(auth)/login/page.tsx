@@ -14,11 +14,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const supabase = createClient();
-
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
+    const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
@@ -31,6 +30,7 @@ export default function LoginPage() {
 
   async function handleGoogle() {
     setLoading(true);
+    const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: `${window.location.origin}/` },
