@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { RemindersPageClient } from '@/components/reminders/RemindersPageClient';
 import { createReminder, dismissReminder } from '@/lib/actions/reminders';
 

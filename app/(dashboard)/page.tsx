@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { createClient } from '@/lib/supabase/server';
 import { BorrowerSummary, LenderPortfolio } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils/format';

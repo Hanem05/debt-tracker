@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { BorrowerDetailClient } from '@/components/borrowers/BorrowerDetailClient';
 import { updateBorrower } from '@/lib/actions/borrowers';
 import { recordPayment } from '@/lib/actions/payments';
