@@ -15,7 +15,7 @@ async function getBorrowers() {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return [];
-    const { data } = await supabase.from('borrower_summary').select('*').order('full_name', { ascending: true });
+    const { data } = await supabase.from('borrower_summary').select('*').eq('lender_id', user.id).order('full_name', { ascending: true });
     return (data as BorrowerSummary[]) ?? [];
   } catch {
     return [];

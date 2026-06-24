@@ -22,7 +22,7 @@ async function getPortfolio() {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return emptyPortfolio;
-    const { data } = await supabase.from('lender_portfolio').select('*').maybeSingle();
+    const { data } = await supabase.from('lender_portfolio').select('*').eq('lender_id', user.id).maybeSingle();
     return (data as LenderPortfolio) ?? emptyPortfolio;
   } catch {
     return emptyPortfolio;
@@ -37,6 +37,7 @@ async function getBorrowers() {
     const { data } = await supabase
       .from('borrower_summary')
       .select('*')
+      .eq('lender_id', user.id)
       .order('outstanding_principal', { ascending: false })
       .limit(8);
     return (data as BorrowerSummary[]) ?? [];

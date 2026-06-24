@@ -92,7 +92,8 @@ CREATE INDEX idx_activity_borrower ON public.activity_log (borrower_id);
 CREATE INDEX idx_activity_created ON public.activity_log (lender_id, created_at DESC);
 
 -- VIEW: borrower_summary
-CREATE VIEW public.borrower_summary AS
+-- security_invoker=true makes RLS from the underlying borrowers/payments tables apply to this view
+CREATE VIEW public.borrower_summary WITH (security_invoker = true) AS
 SELECT
   b.id, b.lender_id, b.full_name, b.avatar_initials,
   b.phone, b.email, b.total_borrowed, b.interest_rate,
@@ -147,7 +148,8 @@ LEFT JOIN public.payments p ON p.borrower_id = b.id
 GROUP BY b.id;
 
 -- VIEW: lender_portfolio
-CREATE VIEW public.lender_portfolio AS
+-- security_invoker=true makes RLS apply through the borrower_summary view
+CREATE VIEW public.lender_portfolio WITH (security_invoker = true) AS
 SELECT
   lender_id,
   COUNT(*) AS total_borrowers,

@@ -1,18 +1,18 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { LenderPortfolio } from '@/lib/types';
 
 export function usePortfolio() {
   const [portfolio, setPortfolio] = useState<LenderPortfolio | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     async function load() {
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) { setLoading(false); return; }
       const { data } = await supabase
         .from('lender_portfolio')
         .select('*')
@@ -22,7 +22,7 @@ export function usePortfolio() {
       setLoading(false);
     }
     load();
-  }, [supabase]);
+  }, []);
 
   return { portfolio, loading };
 }
