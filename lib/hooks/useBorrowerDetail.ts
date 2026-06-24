@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { BorrowerSummary, Payment } from '@/lib/types';
 
@@ -8,7 +8,7 @@ export function useBorrowerDetail(id: string) {
   const [borrower, setBorrower] = useState<BorrowerSummary | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const load = useCallback(async () => {
     setLoading(true);

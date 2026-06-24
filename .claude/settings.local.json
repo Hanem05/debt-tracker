@@ -10,7 +10,16 @@
       "Bash(git config *)",
       "Bash(git --version)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git commit -m 'Fix middleware: redirect to login on auth error instead of passing through *)",
+      "Bash(sed -i '' 's/^export function InterestRateChart\\(\\\\\\(.*\\\\\\)\\) {$/export const InterestRateChart = memo\\(function InterestRateChart\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/dashboard/InterestRateChart.tsx)",
+      "Bash(sed -i '' 's/^export function BarChartCard\\(\\\\\\(.*\\\\\\)\\) {$/export const BarChartCard = memo\\(function BarChartCard\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/dashboard/LoanBreakdownChart.tsx)",
+      "Bash(sed -i '' 's/^export function DonutChart\\(\\\\\\(.*\\\\\\)\\) {$/export const DonutChart = memo\\(function DonutChart\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/dashboard/PortfolioPieChart.tsx)",
+      "Bash(sed -i '' 's/^export function TopBorrowersTable\\(\\\\\\(.*\\\\\\)\\) {$/export const TopBorrowersTable = memo\\(function TopBorrowersTable\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/dashboard/TopBorrowersTable.tsx)",
+      "Bash(sed -i '' 's/^export function InterestRateChart\\(\\\\\\(.*\\\\\\)\\) {$/export const InterestRateChart = memo\\(function InterestRateChart\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/analytics/InterestRateChart.tsx)",
+      "Bash(sed -i '' 's/^export function MetricsTable\\(\\\\\\(.*\\\\\\)\\) {$/export const MetricsTable = memo\\(function MetricsTable\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/analytics/MetricsTable.tsx)",
+      "Bash(sed -i '' 's/^export function RepaymentRateChart\\(\\\\\\(.*\\\\\\)\\) {$/export const RepaymentRateChart = memo\\(function RepaymentRateChart\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/analytics/RepaymentRateChart.tsx)",
+      "Bash(sed -i '' 's/^export function LoanDistributionChart\\(\\\\\\(.*\\\\\\)\\) {$/export const LoanDistributionChart = memo\\(function LoanDistributionChart\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/analytics/LoanDistributionChart.tsx)"
     ]
   }
 }

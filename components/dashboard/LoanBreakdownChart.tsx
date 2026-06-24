@@ -1,3 +1,4 @@
+import { memo } from 'react';
 'use client';
 
 import type { BorrowerSummary } from '@/lib/types';
@@ -8,7 +9,7 @@ interface Props {
   borrowers: BorrowerSummary[];
 }
 
-export function BarChartCard({ borrowers }: Props) {
+export const BarChartCard = memo(function BarChartCard({ borrowers }: Props) {
   const data = borrowers
     .slice(0, 6)
     .map((b) => ({
@@ -47,3 +48,4 @@ export function BarChartCard({ borrowers }: Props) {
     </div>
   );
 }
+);

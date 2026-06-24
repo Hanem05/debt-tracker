@@ -1,3 +1,4 @@
+import { memo } from 'react';
 'use client';
 
 import type { BorrowerSummary } from '@/lib/types';
@@ -7,7 +8,7 @@ interface Props {
   borrowers: BorrowerSummary[];
 }
 
-export function InterestRateChart({ borrowers }: Props) {
+export const InterestRateChart = memo(function InterestRateChart({ borrowers }: Props) {
   const data = borrowers.map((borrower) => ({ name: borrower.full_name, rate: borrower.interest_rate }));
 
   return (
@@ -28,3 +29,4 @@ export function InterestRateChart({ borrowers }: Props) {
     </div>
   );
 }
+);

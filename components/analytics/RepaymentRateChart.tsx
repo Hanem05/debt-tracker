@@ -1,3 +1,4 @@
+import { memo } from 'react';
 'use client';
 
 import type { BorrowerSummary } from '@/lib/types';
@@ -30,7 +31,7 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Toolti
   );
 }
 
-export function RepaymentRateChart({ borrowers }: Props) {
+export const RepaymentRateChart = memo(function RepaymentRateChart({ borrowers }: Props) {
   const data = borrowers.map((b) => {
     const totalLoan = (b.total_borrowed ?? 0) + (b.base_interest ?? 0);
     const paidPct = totalLoan > 0 ? Math.min(100, Math.round(((b.total_paid_all ?? 0) / totalLoan) * 100)) : 0;
@@ -106,3 +107,4 @@ export function RepaymentRateChart({ borrowers }: Props) {
     </div>
   );
 }
+);

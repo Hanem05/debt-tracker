@@ -1,3 +1,4 @@
+import { memo } from 'react';
 'use client';
 
 import type { BorrowerSummary } from '@/lib/types';
@@ -14,7 +15,7 @@ const SLICES = [
   { key: 'settled', label: 'Settled', color: '#4ade80' },
 ];
 
-export function DonutChart({ borrowers }: Props) {
+export const DonutChart = memo(function DonutChart({ borrowers }: Props) {
   const totals = SLICES.map(({ key, label, color }) => ({
     name: label,
     value: borrowers.filter((b) => b.status === key).reduce((sum, b) => sum + b.outstanding_principal, 0),
@@ -72,3 +73,4 @@ export function DonutChart({ borrowers }: Props) {
     </div>
   );
 }
+);

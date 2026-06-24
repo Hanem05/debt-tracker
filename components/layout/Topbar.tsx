@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
 import { Plus, Menu } from 'lucide-react';
 
 const pageMeta: Record<string, { label: string; title: string }> = {
@@ -16,11 +17,12 @@ const pageMeta: Record<string, { label: string; title: string }> = {
 export function Topbar() {
   const pathname = usePathname();
 
-  const key = Object.keys(pageMeta)
-    .filter((k) => (k === '/' ? pathname === '/' : pathname.startsWith(k)))
-    .sort((a, b) => b.length - a.length)[0] ?? '/';
-
-  const meta = pageMeta[key];
+  const meta = useMemo(() => {
+    const key = Object.keys(pageMeta)
+      .filter((k) => (k === '/' ? pathname === '/' : pathname.startsWith(k)))
+      .sort((a, b) => b.length - a.length)[0] ?? '/';
+    return pageMeta[key];
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-bg-2/80 px-5 py-3 backdrop-blur-xl">

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 'use client';
 
 import Link from 'next/link';
@@ -10,7 +11,7 @@ interface Props {
   borrowers: BorrowerSummary[];
 }
 
-export function TopBorrowersTable({ borrowers }: Props) {
+export const TopBorrowersTable = memo(function TopBorrowersTable({ borrowers }: Props) {
   const top = [...borrowers]
     .sort((a, b) => b.outstanding_principal - a.outstanding_principal)
     .slice(0, 5);
@@ -71,3 +72,4 @@ export function TopBorrowersTable({ borrowers }: Props) {
     </div>
   );
 }
+);

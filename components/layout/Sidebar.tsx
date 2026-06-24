@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Users, BarChart3, Bell, Settings, TrendingUp, Bot } from 'lucide-react';
@@ -14,7 +15,7 @@ const navItems = [
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
-export function Sidebar() {
+export const Sidebar = memo(function Sidebar() {
   const pathname = usePathname();
 
   function isActive(href: string) {
@@ -74,4 +75,4 @@ export function Sidebar() {
       </div>
     </aside>
   );
-}
+});

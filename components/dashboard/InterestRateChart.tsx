@@ -1,3 +1,4 @@
+import { memo } from 'react';
 'use client';
 
 import type { BorrowerSummary } from '@/lib/types';
@@ -7,7 +8,7 @@ interface Props {
   borrowers: BorrowerSummary[];
 }
 
-export function InterestRateChart({ borrowers }: Props) {
+export const InterestRateChart = memo(function InterestRateChart({ borrowers }: Props) {
   const sorted = [...borrowers]
     .sort((a, b) => b.interest_rate - a.interest_rate)
     .slice(0, 6)
@@ -56,3 +57,4 @@ export function InterestRateChart({ borrowers }: Props) {
     </div>
   );
 }
+);

@@ -41,7 +41,8 @@ export function PaymentForm({ isOpen, onClose, onSubmit, outstanding }: Props) {
         payment_date: new Date().toISOString().slice(0, 10),
       });
     }
-  }, [isOpen, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const amount = Number(useWatch({ control, name: 'amount' }) ?? 0);
   const remaining = Math.max(0, outstanding - amount);

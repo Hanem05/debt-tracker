@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { LenderPortfolio } from '@/lib/types';
 
 export function usePortfolio() {
   const [portfolio, setPortfolio] = useState<LenderPortfolio | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     async function load() {

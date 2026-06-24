@@ -1,5 +1,6 @@
 'use client';
 
+import { memo, useMemo } from 'react';
 import Link from 'next/link';
 import type { BorrowerSummary } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils/format';
@@ -18,14 +19,17 @@ interface BorrowerTableProps {
   onPay: (borrower: BorrowerSummary) => void;
 }
 
-export function BorrowerTable({ borrowers, query, statusFilter, onView, onPay }: BorrowerTableProps) {
-  const filtered = borrowers.filter((borrower) => {
-    const matchesQuery = [borrower.full_name, borrower.email, borrower.phone].some((value) =>
-      value?.toLowerCase().includes(query.toLowerCase())
-    );
-    const matchesStatus = statusFilter === 'all' || borrower.status === statusFilter;
-    return matchesQuery && matchesStatus;
-  });
+export const BorrowerTable = memo(function BorrowerTable({ borrowers, query, statusFilter, onView, onPay }: BorrowerTableProps) {
+  const filtered = useMemo(() =>
+    borrowers.filter((borrower) => {
+      const matchesQuery = [borrower.full_name, borrower.email, borrower.phone].some((value) =>
+        value?.toLowerCase().includes(query.toLowerCase())
+      );
+      const matchesStatus = statusFilter === 'all' || borrower.status === statusFilter;
+      return matchesQuery && matchesStatus;
+    }),
+    [borrowers, query, statusFilter]
+  );
 
   if (!filtered.length) {
     return (
@@ -106,4 +110,4 @@ export function BorrowerTable({ borrowers, query, statusFilter, onView, onPay }:
       </table>
     </div>
   );
-}
+});

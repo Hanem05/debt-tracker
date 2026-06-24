@@ -1,3 +1,4 @@
+import { memo } from 'react';
 'use client';
 
 import type { BorrowerSummary } from '@/lib/types';
@@ -9,7 +10,7 @@ interface Props {
 
 const COLORS = ['#22d3ee', '#4ade80', '#f97316', '#a78bfa', '#fbbf24'];
 
-export function LoanDistributionChart({ borrowers }: Props) {
+export const LoanDistributionChart = memo(function LoanDistributionChart({ borrowers }: Props) {
   const data = borrowers.map((borrower) => ({ name: borrower.full_name, value: borrower.total_borrowed }));
 
   return (
@@ -33,3 +34,4 @@ export function LoanDistributionChart({ borrowers }: Props) {
     </div>
   );
 }
+);

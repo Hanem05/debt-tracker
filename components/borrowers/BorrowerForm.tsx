@@ -40,7 +40,8 @@ export function BorrowerForm({ isOpen, onClose, initialValues, onSubmit }: Props
 
   useEffect(() => {
     if (isOpen) reset(initialValues ? { ...EMPTY, ...initialValues } : EMPTY);
-  }, [isOpen, initialValues, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, initialValues]);
 
   const watchedTotal = Number(watch('total_borrowed') ?? 0);
   const watchedRate = Number(watch('interest_rate') ?? 0);

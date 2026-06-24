@@ -1,3 +1,4 @@
+import { memo } from 'react';
 'use client';
 
 import Link from 'next/link';
@@ -10,7 +11,7 @@ interface Props {
   borrowers: BorrowerSummary[];
 }
 
-export function MetricsTable({ borrowers }: Props) {
+export const MetricsTable = memo(function MetricsTable({ borrowers }: Props) {
   if (!borrowers.length) {
     return (
       <div className="rounded-[18px] border border-border bg-bg/80 p-8 text-center text-sm text-text/50">
@@ -71,3 +72,4 @@ export function MetricsTable({ borrowers }: Props) {
     </div>
   );
 }
+);

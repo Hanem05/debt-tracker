@@ -77,7 +77,7 @@ export default function AiPageClient() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    bottomRef.current?.scrollIntoView({ behavior: 'auto' });
   }, [messages]);
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function AiPageClient() {
 
     const history = isSystemInit
       ? [{ role: 'user' as const, content: text.trim() }]
-      : [...messages, userMsg].map((m) => ({ role: m.role, content: m.content }));
+      : [...messages, userMsg].slice(-10).map((m) => ({ role: m.role, content: m.content }));
 
     try {
       const res = await fetch('/api/ai', {
@@ -163,7 +163,7 @@ export default function AiPageClient() {
           </div>
           <div>
             <p className="text-sm font-semibold text-white">Lending Assistant</p>
-            <p className="text-xs text-text/50">Powered by Gemini · Always online</p>
+            <p className="text-xs text-text/50">Powered by Groq · Always online</p>
           </div>
         </div>
         {hasMessages && (
