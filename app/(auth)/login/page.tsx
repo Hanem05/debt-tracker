@@ -17,26 +17,36 @@ export default function LoginPage() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
-    if (error) {
-      toast.error(error.message);
-      return;
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+      toast.success('Signed in successfully');
+      router.push('/');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to sign in. Check your connection.');
+    } finally {
+      setLoading(false);
     }
-    toast.success('Signed in successfully');
-    router.push('/');
   }
 
   async function handleGoogle() {
     setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/` },
-    });
-    setLoading(false);
-    if (error) toast.error(error.message);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: `${window.location.origin}/` },
+      });
+      if (error) toast.error(error.message);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to connect to Google.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

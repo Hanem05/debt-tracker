@@ -27,19 +27,24 @@ export default function SignupPage() {
       return;
     }
     setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { full_name: fullName } },
-    });
-    setLoading(false);
-    if (error) {
-      toast.error(error.message);
-      return;
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: fullName } },
+      });
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+      toast.success('Account created! Check your email to confirm.');
+      router.push('/login');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to create account.');
+    } finally {
+      setLoading(false);
     }
-    toast.success('Account created! Check your email to confirm.');
-    router.push('/login');
   }
 
   return (
