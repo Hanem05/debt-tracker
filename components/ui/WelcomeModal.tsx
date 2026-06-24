@@ -1,67 +1,76 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { createClient } from '@/lib/supabase/client';
 import { TrendingUp, Users, BarChart3, Bell, Bot, ArrowRight, X } from 'lucide-react';
 
 const features = [
-  { icon: Users, color: 'text-cyan', bg: 'bg-cyan/10', label: 'Borrowers', desc: 'Track every borrower, loan amount, and repayment.' },
-  { icon: BarChart3, color: 'text-purple', bg: 'bg-purple/10', label: 'Analytics', desc: 'Visualize your portfolio performance at a glance.' },
-  { icon: Bell, color: 'text-orange', bg: 'bg-orange/10', label: 'Reminders', desc: 'Set follow-up alerts so no payment slips through.' },
-  { icon: Bot, color: 'text-green', bg: 'bg-green/10', label: 'AI Assistant', desc: 'Get instant insights and lending tips powered by AI.' },
+  { icon: Users,    color: 'text-cyan',   bg: 'bg-cyan/10',   label: 'Borrowers',    desc: 'Track every borrower, loan amount, and repayment.' },
+  { icon: BarChart3, color: 'text-purple', bg: 'bg-purple/10', label: 'Analytics',    desc: 'Visualize your portfolio performance at a glance.' },
+  { icon: Bell,     color: 'text-orange', bg: 'bg-orange/10', label: 'Reminders',    desc: 'Set follow-up alerts so no payment slips through.' },
+  { icon: Bot,      color: 'text-green',  bg: 'bg-green/10',  label: 'AI Assistant', desc: 'Get instant insights and lending tips powered by AI.' },
 ];
 
 export function WelcomeModal() {
-  const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
   const [name, setName] = useState('');
-  const [mounted, setMounted] = useState(false);
+  const checked = useRef(false); // guard against React Strict Mode double-invoke
 
   useEffect(() => {
-    setMounted(true);
-    async function check() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+    if (checked.current) return;
+    checked.current = true;
 
-      const key = `dtp_welcomed_${user.id}`;
-      if (localStorage.getItem(key)) return;
+    (async () => {
+      try {
+        const supabase = createClient();
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error || !user) return;
 
-      // First time — get their name and show the modal
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('full_name, display_name')
-        .eq('id', user.id)
-        .single();
+        const key = `dtp_welcomed_${user.id}`;
+        if (localStorage.getItem(key)) return;
 
-      const displayName = profile?.display_name || profile?.full_name || user.email?.split('@')[0] || 'there';
-      setName(displayName);
-      setOpen(true);
-      localStorage.setItem(key, '1');
-    }
-    check();
+        // Mark as seen immediately so double-invocations don't double-show
+        localStorage.setItem(key, '1');
+
+        // Try to get their display name from their profile
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name, display_name')
+          .eq('id', user.id)
+          .single();
+
+        const displayName =
+          profile?.display_name ||
+          profile?.full_name ||
+          user.user_metadata?.full_name ||
+          user.email?.split('@')[0] ||
+          'there';
+
+        setName(displayName);
+        setShow(true);
+      } catch {
+        // Silently fail — modal is non-critical
+      }
+    })();
   }, []);
 
-  function dismiss() {
-    setOpen(false);
-  }
-
-  if (!mounted || !open) return null;
+  if (!show) return null;
 
   return createPortal(
     <div className="fixed inset-0 z-[60] flex items-center justify-center px-4 py-8">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={dismiss} />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShow(false)} />
 
       {/* Card */}
-      <div className="relative w-full max-w-md overflow-hidden rounded-[24px] border border-border bg-bg-2 shadow-card">
+      <div className="relative w-full max-w-md overflow-hidden rounded-[24px] border border-border bg-bg-2 shadow-card animate-in fade-in zoom-in-95 duration-200">
         {/* Top accent bar */}
         <div className="h-1 w-full bg-gradient-to-r from-cyan via-purple/60 to-green/60" />
 
-        {/* Close button */}
+        {/* Close */}
         <button
           type="button"
-          onClick={dismiss}
+          onClick={() => setShow(false)}
           className="absolute right-4 top-4 rounded-full p-1.5 text-text/40 transition hover:bg-white/5 hover:text-white"
         >
           <X className="h-4 w-4" />
@@ -99,7 +108,7 @@ export function WelcomeModal() {
           {/* CTA */}
           <button
             type="button"
-            onClick={dismiss}
+            onClick={() => setShow(false)}
             className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-cyan px-5 py-3 text-[14px] font-semibold text-bg shadow-glow-sm transition-all hover:bg-cyan/90 active:scale-[0.98]"
           >
             Get started
