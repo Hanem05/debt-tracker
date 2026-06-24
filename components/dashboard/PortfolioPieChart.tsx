@@ -1,5 +1,5 @@
-import { memo } from 'react';
 'use client';
+import { memo } from 'react';
 
 import type { BorrowerSummary } from '@/lib/types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';

@@ -1,5 +1,5 @@
-import { memo } from 'react';
 'use client';
+import { memo } from 'react';
 
 import type { BorrowerSummary } from '@/lib/types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';

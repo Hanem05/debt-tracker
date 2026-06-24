@@ -1,5 +1,5 @@
-import { memo } from 'react';
 'use client';
+import { memo } from 'react';
 
 import Link from 'next/link';
 import type { BorrowerSummary } from '@/lib/types';
