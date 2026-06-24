@@ -43,7 +43,11 @@ export async function middleware(request: NextRequest) {
 
     return response;
   } catch {
-    // On any unexpected error, pass the request through rather than returning 500
+    const path = request.nextUrl.pathname;
+    const isAuthRoute = path.startsWith('/login') || path.startsWith('/signup');
+    if (!isAuthRoute) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
     return NextResponse.next();
   }
 }
