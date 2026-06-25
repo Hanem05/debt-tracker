@@ -86,7 +86,7 @@ export const BorrowerTable = memo(function BorrowerTable({ borrowers, query, sta
                     {formatCurrency(outstanding)}
                   </p>
                   {isOverdue && (borrower.overdue_interest ?? 0) > 0 && (
-                    <p className="text-[11px] text-orange/60">+{formatCurrency(borrower.total_borrowed * 0.02)}/day</p>
+                    <p className="text-[11px] text-orange/60">+{formatCurrency(borrower.total_borrowed * ((borrower.penalty_rate ?? 2) / 100))}/day</p>
                   )}
                 </td>
                 <td className="px-5 py-4 text-right font-mono text-[13px] text-cyan whitespace-nowrap">

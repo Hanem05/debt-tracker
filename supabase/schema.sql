@@ -30,6 +30,7 @@ CREATE TABLE public.borrowers (
   interest_type   TEXT NOT NULL DEFAULT 'flat' CHECK (interest_type IN ('flat', 'compound', 'reducing')),
   loan_date       DATE NOT NULL DEFAULT CURRENT_DATE,
   due_date        DATE,
+  penalty_rate    NUMERIC(6, 3) NOT NULL DEFAULT 2.0 CHECK (penalty_rate >= 0),
   status          TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'overdue', 'settled', 'written_off')),
   created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -97,7 +98,7 @@ CREATE VIEW public.borrower_summary WITH (security_invoker = true) AS
 SELECT
   b.id, b.lender_id, b.full_name, b.avatar_initials,
   b.phone, b.email, b.total_borrowed, b.interest_rate,
-  b.interest_type, b.loan_date, b.due_date, b.status, b.notes,
+  b.interest_type, b.loan_date, b.due_date, b.penalty_rate, b.status, b.notes,
   COALESCE(SUM(p.amount) FILTER (WHERE p.payment_type = 'principal'), 0) AS total_paid_principal,
   COALESCE(SUM(p.amount) FILTER (WHERE p.payment_type = 'interest'), 0) AS total_paid_interest,
   COALESCE(SUM(p.amount) FILTER (WHERE p.payment_type = 'penalty'), 0) AS total_paid_penalty,
@@ -105,16 +106,16 @@ SELECT
   b.total_borrowed - COALESCE(SUM(p.amount) FILTER (WHERE p.payment_type = 'principal'), 0) AS outstanding_principal,
   -- base interest on the original loan amount
   ROUND(b.total_borrowed * (b.interest_rate / 100), 2) AS base_interest,
-  -- overdue penalty: 2% of the original loan amount per day after due date
+  -- overdue penalty: penalty_rate% of original loan amount per day after due date
   ROUND(
-    b.total_borrowed * 0.02
+    b.total_borrowed * (b.penalty_rate / 100)
     * GREATEST(CASE WHEN b.due_date < CURRENT_DATE AND b.status != 'settled' THEN CURRENT_DATE - b.due_date ELSE 0 END, 0),
     2
   ) AS overdue_interest,
   -- accrued interest = base interest + overdue penalty
   ROUND(
     ROUND(b.total_borrowed * (b.interest_rate / 100), 2)
-    + b.total_borrowed * 0.02
+    + b.total_borrowed * (b.penalty_rate / 100)
       * GREATEST(CASE WHEN b.due_date < CURRENT_DATE AND b.status != 'settled' THEN CURRENT_DATE - b.due_date ELSE 0 END, 0),
     2
   ) AS accrued_interest,
@@ -124,7 +125,7 @@ SELECT
       (b.total_borrowed + ROUND(b.total_borrowed * (b.interest_rate / 100), 2) - COALESCE(SUM(p.amount), 0)),
       0
     )
-    + b.total_borrowed * 0.02
+    + b.total_borrowed * (b.penalty_rate / 100)
       * GREATEST(CASE WHEN b.due_date < CURRENT_DATE AND b.status != 'settled' THEN CURRENT_DATE - b.due_date ELSE 0 END, 0),
     2
   ) AS total_balance,

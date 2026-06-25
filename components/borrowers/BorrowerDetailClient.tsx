@@ -20,6 +20,7 @@ function toFormValues(b: BorrowerSummary): BorrowerFormValues {
     interest_type: b.interest_type,
     loan_date: b.loan_date,
     due_date: b.due_date ?? undefined,
+    penalty_rate: b.penalty_rate ?? 2,
     status: b.status,
   };
 }

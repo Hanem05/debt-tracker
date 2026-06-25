@@ -26,6 +26,7 @@ const EMPTY: BorrowerFormValues = {
   interest_type: 'flat',
   loan_date: new Date().toISOString().slice(0, 10),
   due_date: '',
+  penalty_rate: 2,
   status: 'active',
 };
 
@@ -45,7 +46,9 @@ export function BorrowerForm({ isOpen, onClose, initialValues, onSubmit }: Props
 
   const watchedTotal = Number(watch('total_borrowed') ?? 0);
   const watchedRate = Number(watch('interest_rate') ?? 0);
+  const watchedPenalty = Number(watch('penalty_rate') ?? 0);
   const interestTotal = Math.round(watchedTotal * (watchedRate / 100) * 100) / 100;
+  const dailyPenalty = Math.round(watchedTotal * (watchedPenalty / 100) * 100) / 100;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={initialValues ? 'Edit borrower' : 'Add borrower'} size="lg">
@@ -99,6 +102,22 @@ export function BorrowerForm({ isOpen, onClose, initialValues, onSubmit }: Props
 
           <Input label="Loan date" type="date" {...register('loan_date')} />
           <Input label="Due date" type="date" {...register('due_date')} />
+
+          <div>
+            <Input
+              label="Penalty rate (%/day)"
+              type="number"
+              step="0.01"
+              min="0"
+              placeholder="2.00"
+              {...register('penalty_rate', { valueAsNumber: true })}
+            />
+            {watchedPenalty > 0 && watchedTotal > 0 && (
+              <p className="mt-1.5 rounded-lg border border-orange/20 bg-orange/8 px-3 py-2 text-[12px] text-orange/80">
+                ₱{dailyPenalty.toLocaleString('en-PH', { minimumFractionDigits: 2 })} charged per day after due date
+              </p>
+            )}
+          </div>
 
           <div className="space-y-1.5">
             <label className="block text-xs uppercase tracking-[0.24em] text-text/60">Status</label>

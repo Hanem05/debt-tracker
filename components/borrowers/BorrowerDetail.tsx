@@ -122,19 +122,19 @@ export function BorrowerDetail({ borrower, payments, onEdit, onPay }: Props) {
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-orange/60">Overdue penalty</p>
               <p className="mt-1.5 font-mono text-2xl font-semibold text-orange">{formatCurrency(borrower.overdue_interest ?? 0)}</p>
               <p className="mt-1 text-[12px] text-text/50">
-                {formatCurrency(borrower.total_borrowed * 0.02)}/day
+                {formatCurrency(borrower.total_borrowed * ((borrower.penalty_rate ?? 2) / 100))}/day
                 {borrower.days_overdue ? ` · ${borrower.days_overdue} day${borrower.days_overdue !== 1 ? 's' : ''} overdue` : ''}
               </p>
             </div>
             <div className="rounded-xl border border-orange/20 bg-orange/10 px-4 py-3 text-center sm:text-right">
               <p className="text-[10px] uppercase tracking-[0.2em] text-orange/50">Daily rate</p>
-              <p className="mt-0.5 font-mono text-lg font-semibold text-orange">{formatCurrency(borrower.total_borrowed * 0.02)}</p>
-              <p className="text-[11px] text-orange/50">2% of ₱{borrower.total_borrowed.toLocaleString('en-PH')}</p>
+              <p className="mt-0.5 font-mono text-lg font-semibold text-orange">{formatCurrency(borrower.total_borrowed * ((borrower.penalty_rate ?? 2) / 100))}</p>
+              <p className="text-[11px] text-orange/50">{borrower.penalty_rate ?? 2}% of ₱{borrower.total_borrowed.toLocaleString('en-PH')}</p>
             </div>
           </div>
           <div className="mt-3 flex items-center gap-2 rounded-lg border border-orange/15 bg-orange/5 px-3 py-2 text-[12px] text-orange/70">
             <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-            Penalty increases by {formatCurrency(borrower.total_borrowed * 0.02)} every day until the loan is settled.
+            Penalty increases by {formatCurrency(borrower.total_borrowed * ((borrower.penalty_rate ?? 2) / 100))} every day until the loan is settled.
           </div>
         </div>
       )}

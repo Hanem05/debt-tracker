@@ -28,6 +28,7 @@ export interface Borrower {
   interest_type: InterestType;
   loan_date: string;
   due_date: string | null;
+  penalty_rate: number;
   status: BorrowerStatus;
   created_at: string;
   updated_at: string;
@@ -111,6 +112,7 @@ export interface BorrowerFormValues {
   interest_type: InterestType;
   loan_date: string;
   due_date?: string;
+  penalty_rate: number;
   status: BorrowerStatus;
 }
 

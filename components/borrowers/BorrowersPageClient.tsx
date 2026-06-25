@@ -20,6 +20,7 @@ function toFormValues(b: BorrowerSummary): BorrowerFormValues {
     interest_type: b.interest_type,
     loan_date: b.loan_date,
     due_date: b.due_date ?? undefined,
+    penalty_rate: b.penalty_rate ?? 2,
     status: b.status,
   };
 }
@@ -67,6 +68,7 @@ export default function BorrowersPageClient({ createBorrower, updateBorrower, re
       interest_type: values.interest_type,
       loan_date: values.loan_date,
       due_date: values.due_date ?? null,
+      penalty_rate: values.penalty_rate ?? 2,
       status: values.status,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
