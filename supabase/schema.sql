@@ -105,38 +105,27 @@ SELECT
   b.total_borrowed - COALESCE(SUM(p.amount) FILTER (WHERE p.payment_type = 'principal'), 0) AS outstanding_principal,
   -- base interest on the original loan amount
   ROUND(b.total_borrowed * (b.interest_rate / 100), 2) AS base_interest,
-  -- overdue interest: 2% per day on the remaining balance (principal + base interest - payments)
+  -- overdue penalty: 2% of the original loan amount per day after due date
   ROUND(
-    GREATEST(
-      (b.total_borrowed + ROUND(b.total_borrowed * (b.interest_rate / 100), 2) - COALESCE(SUM(p.amount), 0)),
-      0
-    )
-    * 0.02
+    b.total_borrowed * 0.02
     * GREATEST(CASE WHEN b.due_date < CURRENT_DATE AND b.status != 'settled' THEN CURRENT_DATE - b.due_date ELSE 0 END, 0),
     2
   ) AS overdue_interest,
-  -- accrued interest includes base + overdue
-  ROUND(ROUND(b.total_borrowed * (b.interest_rate / 100), 2) + (
-    GREATEST(
-      (b.total_borrowed + ROUND(b.total_borrowed * (b.interest_rate / 100), 2) - COALESCE(SUM(p.amount), 0)),
-      0
-    )
-    * 0.02
-    * GREATEST(CASE WHEN b.due_date < CURRENT_DATE AND b.status != 'settled' THEN CURRENT_DATE - b.due_date ELSE 0 END, 0)
-  ), 2) AS accrued_interest,
-  -- total balance = remaining principal+base interest - payments + overdue interest
+  -- accrued interest = base interest + overdue penalty
+  ROUND(
+    ROUND(b.total_borrowed * (b.interest_rate / 100), 2)
+    + b.total_borrowed * 0.02
+      * GREATEST(CASE WHEN b.due_date < CURRENT_DATE AND b.status != 'settled' THEN CURRENT_DATE - b.due_date ELSE 0 END, 0),
+    2
+  ) AS accrued_interest,
+  -- total balance = (principal + base interest - all payments) + overdue penalty
   ROUND(
     GREATEST(
       (b.total_borrowed + ROUND(b.total_borrowed * (b.interest_rate / 100), 2) - COALESCE(SUM(p.amount), 0)),
       0
-    ) + (
-      GREATEST(
-        (b.total_borrowed + ROUND(b.total_borrowed * (b.interest_rate / 100), 2) - COALESCE(SUM(p.amount), 0)),
-        0
-      )
-      * 0.02
-      * GREATEST(CASE WHEN b.due_date < CURRENT_DATE AND b.status != 'settled' THEN CURRENT_DATE - b.due_date ELSE 0 END, 0)
-    ),
+    )
+    + b.total_borrowed * 0.02
+      * GREATEST(CASE WHEN b.due_date < CURRENT_DATE AND b.status != 'settled' THEN CURRENT_DATE - b.due_date ELSE 0 END, 0),
     2
   ) AS total_balance,
   COUNT(p.id) AS payment_count,

@@ -19,7 +19,8 @@
       "Bash(sed -i '' 's/^export function InterestRateChart\\(\\\\\\(.*\\\\\\)\\) {$/export const InterestRateChart = memo\\(function InterestRateChart\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/analytics/InterestRateChart.tsx)",
       "Bash(sed -i '' 's/^export function MetricsTable\\(\\\\\\(.*\\\\\\)\\) {$/export const MetricsTable = memo\\(function MetricsTable\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/analytics/MetricsTable.tsx)",
       "Bash(sed -i '' 's/^export function RepaymentRateChart\\(\\\\\\(.*\\\\\\)\\) {$/export const RepaymentRateChart = memo\\(function RepaymentRateChart\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/analytics/RepaymentRateChart.tsx)",
-      "Bash(sed -i '' 's/^export function LoanDistributionChart\\(\\\\\\(.*\\\\\\)\\) {$/export const LoanDistributionChart = memo\\(function LoanDistributionChart\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/analytics/LoanDistributionChart.tsx)"
+      "Bash(sed -i '' 's/^export function LoanDistributionChart\\(\\\\\\(.*\\\\\\)\\) {$/export const LoanDistributionChart = memo\\(function LoanDistributionChart\\(\\\\1\\) {/' /Users/vincent/Debt-Trackers/components/analytics/LoanDistributionChart.tsx)",
+      "Bash(xargs cat)"
     ]
   }
 }

@@ -81,8 +81,13 @@ export const BorrowerTable = memo(function BorrowerTable({ borrowers, query, sta
                   <p className="font-mono text-[13px] font-medium text-white whitespace-nowrap">{formatCurrency(totalLoan)}</p>
                   <p className="text-[11px] text-text/30 whitespace-nowrap">{formatCurrency(borrower.total_borrowed)} + {borrower.interest_rate ?? 0}%</p>
                 </td>
-                <td className={`px-5 py-4 text-right font-mono text-[13px] font-semibold whitespace-nowrap ${isOverdue ? 'text-orange' : outstanding === 0 ? 'text-green' : 'text-text'}`}>
-                  {formatCurrency(outstanding)}
+                <td className="px-5 py-4 text-right whitespace-nowrap">
+                  <p className={`font-mono text-[13px] font-semibold ${isOverdue ? 'text-orange' : outstanding === 0 ? 'text-green' : 'text-text'}`}>
+                    {formatCurrency(outstanding)}
+                  </p>
+                  {isOverdue && (borrower.overdue_interest ?? 0) > 0 && (
+                    <p className="text-[11px] text-orange/60">+{formatCurrency(borrower.total_borrowed * 0.02)}/day</p>
+                  )}
                 </td>
                 <td className="px-5 py-4 text-right font-mono text-[13px] text-cyan whitespace-nowrap">
                   {formatCurrency(borrower.total_paid_all)}
