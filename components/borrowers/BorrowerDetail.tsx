@@ -88,7 +88,7 @@ export function BorrowerDetail({ borrower, payments, onEdit, onPay }: Props) {
       </div>
 
       {/* Stat mini-cards */}
-      <div className="grid gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <div className="rounded-[14px] border border-border bg-bg-2/60 p-4 shadow-card">
           <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-text/35">Principal</p>
           <p className="mt-2 font-mono text-xl font-semibold text-white">{formatCurrency(borrower.total_borrowed)}</p>

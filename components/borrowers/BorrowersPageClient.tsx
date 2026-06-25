@@ -142,7 +142,7 @@ export default function BorrowersPageClient({ createBorrower, updateBorrower, re
           onChange={(event) => setSearch(event.target.value)}
           className="w-full rounded-xl border border-border bg-bg-2/80 px-4 py-2.5 text-[13px] text-white outline-none placeholder:text-text/25 transition focus:border-cyan/40 focus:ring-2 focus:ring-cyan/8 sm:max-w-[260px]"
         />
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <div className="flex rounded-xl border border-border bg-white/[0.03] p-1">
             {filters.map((filter) => (
               <button

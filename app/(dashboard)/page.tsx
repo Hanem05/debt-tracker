@@ -98,12 +98,12 @@ export default async function DashboardPage() {
         />
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         <BarChartCard borrowers={borrowers} />
         <DonutChart borrowers={borrowers} />
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         <TopBorrowersTable borrowers={borrowers} />
         <InterestRateChart borrowers={borrowers} />
       </div>

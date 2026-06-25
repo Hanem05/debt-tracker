@@ -44,7 +44,7 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="space-y-5 max-w-2xl">
+    <div className="w-full max-w-2xl space-y-5">
       <section className="rounded-[18px] border border-border bg-bg/80 p-6">
         <div className="mb-5 flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan/10">

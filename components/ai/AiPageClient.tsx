@@ -153,7 +153,7 @@ export default function AiPageClient() {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="flex h-[calc(100vh-5rem)] flex-col overflow-hidden rounded-[20px] border border-border bg-bg/80 shadow-card">
+    <div className="flex h-[calc(100dvh-4rem)] flex-col overflow-hidden rounded-[20px] border border-border bg-bg/80 shadow-card sm:h-[calc(100dvh-5rem)]">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border px-5 py-4">
         <div className="flex items-center gap-3">
@@ -230,7 +230,7 @@ export default function AiPageClient() {
                 {/* Bubble */}
                 <div
                   className={cn(
-                    'max-w-[75%] rounded-2xl px-4 py-3',
+                    'max-w-[88%] rounded-2xl px-4 py-3 sm:max-w-[75%]',
                     msg.role === 'user'
                       ? 'rounded-tr-sm bg-cyan/10 text-white'
                       : 'rounded-tl-sm bg-white/[0.04] text-text/80'

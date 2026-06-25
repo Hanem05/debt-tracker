@@ -31,20 +31,20 @@ export function Modal({ isOpen, onClose, title, subtitle, size = 'md', children,
 
   if (!isOpen) return null;
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 py-6">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm px-0 pb-0 sm:items-center sm:px-4 sm:py-6">
       <div className="absolute inset-0" onClick={onClose} />
-      <div className={`relative w-full ${sizeStyles[size]} overflow-hidden rounded-[18px] border border-border bg-bg p-6 shadow-card`}>
+      <div className={`relative w-full ${sizeStyles[size]} overflow-hidden rounded-t-[24px] border border-border bg-bg p-5 shadow-card sm:rounded-[18px] sm:p-6`}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            {title ? <h2 className="text-xl font-semibold text-white">{title}</h2> : null}
+            {title ? <h2 className="text-lg font-semibold text-white sm:text-xl">{title}</h2> : null}
             {subtitle ? <p className="mt-1 text-sm text-text/70">{subtitle}</p> : null}
           </div>
           <button type="button" onClick={onClose} className="rounded-full p-2 text-text/70 transition hover:bg-white/5 hover:text-white">
             <X className="h-4 w-4" />
           </button>
         </div>
-        <div className="mt-6 max-h-[70vh] overflow-y-auto">{children}</div>
-        {footer ? <div className="mt-6 border-t border-border pt-4">{footer}</div> : null}
+        <div className="mt-5 max-h-[75vh] overflow-y-auto sm:mt-6 sm:max-h-[70vh]">{children}</div>
+        {footer ? <div className="mt-5 border-t border-border pt-4 sm:mt-6">{footer}</div> : null}
       </div>
     </div>,
     document.body

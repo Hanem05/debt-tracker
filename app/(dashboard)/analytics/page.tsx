@@ -35,7 +35,7 @@ export default async function AnalyticsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           label="Collection rate"
           value={`${collectionRate}%`}
@@ -63,7 +63,7 @@ export default async function AnalyticsPage() {
           sub={`${borrowers.filter((b) => b.status === 'overdue').length} overdue`}
         />
       </div>
-      <div className="grid gap-4 xl:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3">
         <RepaymentRateChart borrowers={borrowers} />
         <LoanDistributionChart borrowers={borrowers} />
         <InterestRateChart borrowers={borrowers} />

@@ -46,14 +46,14 @@ export const BorrowerTable = memo(function BorrowerTable({ borrowers, query, sta
       <table className="min-w-full text-left text-sm">
         <thead>
           <tr className="border-b border-border">
-            <th className="px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 whitespace-nowrap">Borrower</th>
-            <th className="px-5 py-3.5 text-right text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 whitespace-nowrap">Total loan</th>
-            <th className="px-5 py-3.5 text-right text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 whitespace-nowrap">Outstanding</th>
-            <th className="px-5 py-3.5 text-right text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 whitespace-nowrap">Paid</th>
-            <th className="px-5 py-3.5 text-right text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 whitespace-nowrap">Rate</th>
-            <th className="px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 whitespace-nowrap">Progress</th>
-            <th className="px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 whitespace-nowrap">Status</th>
-            <th className="px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 whitespace-nowrap">Actions</th>
+            <th className="px-4 py-3.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 sm:px-5">Borrower</th>
+            <th className="hidden px-4 py-3.5 text-right text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 sm:table-cell sm:px-5 whitespace-nowrap">Total loan</th>
+            <th className="px-4 py-3.5 text-right text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 sm:px-5 whitespace-nowrap">Outstanding</th>
+            <th className="hidden px-4 py-3.5 text-right text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 lg:table-cell whitespace-nowrap">Paid</th>
+            <th className="hidden px-4 py-3.5 text-right text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 lg:table-cell whitespace-nowrap">Rate</th>
+            <th className="hidden px-4 py-3.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 xl:table-cell whitespace-nowrap">Progress</th>
+            <th className="hidden px-4 py-3.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 sm:table-cell whitespace-nowrap">Status</th>
+            <th className="px-4 py-3.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-text/30 sm:px-5 whitespace-nowrap">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -64,24 +64,29 @@ export const BorrowerTable = memo(function BorrowerTable({ borrowers, query, sta
             const isOverdue = borrower.status === 'overdue';
             return (
               <tr key={borrower.id} className="group border-b border-border/60 last:border-none transition-colors hover:bg-white/[0.025]">
-                <td className="px-5 py-4">
-                  <div className="flex items-center gap-3">
+                {/* Borrower — always visible */}
+                <td className="px-4 py-3.5 sm:px-5">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-cyan/20 to-cyan/5 text-[11px] font-bold text-cyan ring-1 ring-cyan/15">
                       {borrower.avatar_initials}
                     </div>
-                    <div>
-                      <Link href={`/borrowers/${borrower.id}`} className="text-[13px] font-medium text-white transition-colors hover:text-cyan">
+                    <div className="min-w-0">
+                      <Link href={`/borrowers/${borrower.id}`} className="block truncate text-[13px] font-medium text-white transition-colors hover:text-cyan">
                         {borrower.full_name}
                       </Link>
-                      <p className="text-[11px] text-text/35">{borrower.email ?? borrower.phone ?? '—'}</p>
+                      <p className="truncate text-[11px] text-text/35">{borrower.email ?? borrower.phone ?? '—'}</p>
                     </div>
                   </div>
                 </td>
-                <td className="px-5 py-4 text-right">
+
+                {/* Total loan — sm+ */}
+                <td className="hidden px-4 py-3.5 text-right sm:table-cell sm:px-5">
                   <p className="font-mono text-[13px] font-medium text-white whitespace-nowrap">{formatCurrency(totalLoan)}</p>
                   <p className="text-[11px] text-text/30 whitespace-nowrap">{formatCurrency(borrower.total_borrowed)} + {borrower.interest_rate ?? 0}%</p>
                 </td>
-                <td className="px-5 py-4 text-right whitespace-nowrap">
+
+                {/* Outstanding — always visible */}
+                <td className="px-4 py-3.5 text-right sm:px-5 whitespace-nowrap">
                   <p className={`font-mono text-[13px] font-semibold ${isOverdue ? 'text-orange' : outstanding === 0 ? 'text-green' : 'text-text'}`}>
                     {formatCurrency(outstanding)}
                   </p>
@@ -89,18 +94,28 @@ export const BorrowerTable = memo(function BorrowerTable({ borrowers, query, sta
                     <p className="text-[11px] text-orange/60">+{formatCurrency(borrower.total_borrowed * ((borrower.penalty_rate ?? 2) / 100))}/day</p>
                   )}
                 </td>
-                <td className="px-5 py-4 text-right font-mono text-[13px] text-cyan whitespace-nowrap">
+
+                {/* Paid — lg+ */}
+                <td className="hidden px-4 py-3.5 text-right font-mono text-[13px] text-cyan lg:table-cell whitespace-nowrap">
                   {formatCurrency(borrower.total_paid_all)}
                 </td>
-                <td className="px-5 py-4 text-right text-[13px] text-text/50 whitespace-nowrap">{borrower.interest_rate}%</td>
-                <td className="w-36 px-5 py-4">
+
+                {/* Rate — lg+ */}
+                <td className="hidden px-4 py-3.5 text-right text-[13px] text-text/50 lg:table-cell whitespace-nowrap">{borrower.interest_rate}%</td>
+
+                {/* Progress — xl+ */}
+                <td className="hidden w-36 px-4 py-3.5 xl:table-cell">
                   <ProgressBar pct={pct} height={5} />
                   <p className="mt-1.5 text-[11px] text-text/30">{pct}% repaid</p>
                 </td>
-                <td className="px-5 py-4">
+
+                {/* Status — sm+ */}
+                <td className="hidden px-4 py-3.5 sm:table-cell">
                   <Badge variant="status" value={borrower.status} />
                 </td>
-                <td className="px-5 py-4">
+
+                {/* Actions — always visible */}
+                <td className="px-4 py-3.5 sm:px-5">
                   <div className="flex items-center gap-1.5">
                     <Link href={`/borrowers/${borrower.id}`}>
                       <Button variant="ghost" size="sm">Detail</Button>
